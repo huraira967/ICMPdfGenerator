@@ -51,6 +51,10 @@ namespace ICMPdfGenerator.Brokers.PdfBroker
             Document.SetBackgroundColor(adapter.ConvertToColor(TemplateConfiguration.Color));
     
         }
+        public string GetDocument()
+        {
+            return this.PdfFilePath;
+        }
         private void FinalizeDocument()
         {
             Document.Close();

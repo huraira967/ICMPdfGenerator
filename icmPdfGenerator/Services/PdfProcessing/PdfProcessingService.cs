@@ -17,13 +17,14 @@ namespace ICMPdfGenerator.Services.PdfProcessing
             this.pdfModulefTemplate = pdfModulefTemplate;
         }
 
-        public void GenerateRATPdf(RATPDFDTOModel ratingDTO)
+        public string GenerateRATPdf(RATPDFDTOModel ratingDTO)
         {
             var rat = (IRATModuleTemplate)pdfModulefTemplate;
             var table = rat.RATResidentBasicInformation.GetBasicResidentInformation(ratingDTO.ResidentBasicInformation);
             var p = rat.Heading.GetHeading();
             pdfFoundationService.AddParagraph(p);
             pdfFoundationService.AddTable(table);
+            return pdfFoundationService.GetDocumentPath();
         }
     }
 }

@@ -28,5 +28,9 @@ namespace ICMPdfGenerator.Services.PdfFoundationService
             this.pdfBroker.AddTable(convertedTable);
         }
 
+        public string GetDocumentPath()
+        {
+          return  this.pdfBroker.GetDocument();
+        }
     }
 }

@@ -2,7 +2,6 @@
 using ICMPdfGenerator.DTOs.DTOModels.RATDTOs;
 using ICMPdfGenerator.Services.PdfProcessing;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 
 namespace ICMPdfGenerator.Controllers
 {
@@ -21,8 +20,8 @@ namespace ICMPdfGenerator.Controllers
         [HttpPost]
         public IActionResult ResidentAssessmentPDF(RATPDFDTOModel abc)
         {
-            PdfProcessingService.GenerateRATPdf(abc);
-            return Ok();
+            var file = PdfProcessingService.GenerateRATPdf(abc);
+            return Ok(file);
         }
         [HttpPost]
         [Route("facesheet")]

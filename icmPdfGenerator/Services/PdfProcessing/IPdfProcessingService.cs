@@ -5,6 +5,6 @@ namespace ICMPdfGenerator.Services.PdfProcessing
 {
     public interface IPdfProcessingService
     {
-        void GenerateRATPdf(RATPDFDTOModel ratingDTO);
+        string GenerateRATPdf(RATPDFDTOModel ratingDTO);
     }
 }
