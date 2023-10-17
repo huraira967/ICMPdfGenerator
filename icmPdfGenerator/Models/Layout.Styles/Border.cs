@@ -9,6 +9,7 @@ namespace ICMPdfGenerator.Models.Layout.Styles
         private float _Opacity { get; set; } = 1;
         private float _Border { get; set; }
         private Color Color { get; set; }
+        private float _BorderRadius { get; set; }
         
         public Border(float border = 1, BorderType borderType = BorderType.Solid, Color color = Color.BLACK)
         {
@@ -30,9 +31,15 @@ namespace ICMPdfGenerator.Models.Layout.Styles
             this._Opacity = opacity;
             return this;
         }
+        public Border SetBorderRadius(float borderRadius) 
+        {
+            this._BorderRadius = borderRadius;
+            return this;
+        } 
         public float GetOpacity() => this._Opacity;
         public float GetBorderWidth() => this._Border;
         public Color GetBorderColor() => this.Color;
         public BorderType GetBorderType() => this._BorderType;
+        public float GetBorderRadius() => this._BorderRadius;
     }
 }

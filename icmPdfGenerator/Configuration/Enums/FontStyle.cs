@@ -4,6 +4,6 @@
     {
         Italic = 0,
         Bold = 1,
-        Nomral = 2
+        Nomral = 2,
     }
 }

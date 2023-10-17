@@ -54,8 +54,7 @@ namespace ICMPdfGenerator.Extensions.ServiceCollectionExtensions
 
                 }
                 else
-                {
-                    
+                {  
                    configuration = templateConfigurationFactory.GetConfiguration<NoTemplateConfigurations>();
                     PdfDocumentPath pdfDocumentPath = new PdfDocumentPath(0, 0, 0, 0, "NoModule");
 

@@ -1,4 +1,4 @@
-using ICMPdfGenerator.Adapter;
+using ICMPdfGenerator.Mapper;
 using ICMPdfGenerator.Brokers.PdfBroker;
 using ICMPdfGenerator.Builder.documentPathBuilder;
 using ICMPdfGenerator.Extensions.ServiceCollectionExtensions;
@@ -28,15 +28,16 @@ namespace icmPdfGenerator
                 options.AllowSynchronousIO = true;
             });
 
-            builder.Services.AddScoped<IPdfBroker, PdfBroker>();            
+            builder.Services.AddScoped<IItext7PdfBroker, Itext7PdfBroker>();            
             builder.Services.AddSingleton<ITemplateConfigurationsFactory, TemplateConfigurationsFactory>();
             builder.Services.AddTransient<IPdfDocumentPathBuilder, PdfDocumentPathBuilder>();
-            builder.Services.AddSingleton<IItext7Adapter, Itext7Adapter>();
+            builder.Services.AddSingleton<IItext7Mapper, Itext7Mapper>();
             builder.Services.AddScoped<IPdfFoundationService, PdfFoundationService>();
             builder.Services.AddSingleton<IPdfTemplateFactory,  PdfTemplateFactory>();
             builder.Services.AddScoped<IPdfProcessingService, PdfProcessingService>();
             builder.Services.AddResolveTemplateConfiguration();
             builder.Services.AddResolvePdfTemplate();
+
 
 
 

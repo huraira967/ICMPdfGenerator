@@ -2,8 +2,8 @@
 
 namespace ICMPdfGenerator.Brokers.PdfBroker
 {
-    public partial interface IPdfBroker
+    public partial interface IItext7PdfBroker
     {
-        void AddParagraph(Paragraph paragraph);
+        string GetDocument();
     }
 }

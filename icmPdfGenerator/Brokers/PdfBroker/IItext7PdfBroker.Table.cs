@@ -2,7 +2,7 @@
 
 namespace ICMPdfGenerator.Brokers.PdfBroker
 {
-    public partial interface IPdfBroker
+    public partial interface IItext7PdfBroker
     {
         public void AddTable(Table table);
     }

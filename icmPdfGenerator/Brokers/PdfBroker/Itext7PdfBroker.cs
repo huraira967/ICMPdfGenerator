@@ -1,21 +1,21 @@
-﻿using ICMPdfGenerator.Adapter;
+﻿using ICMPdfGenerator.Mapper;
 using ICMPdfGenerator.TemplateConfigurations;
-using iText.IO.Font;
 using iText.IO.Font.Constants;
-using iText.IO.Image;
+using iText.Kernel.Colors;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Draw;
 using iText.Layout;
 using iText.Layout.Element;
+using iText.Layout.Hyphenation;
 using iText.Layout.Properties;
-using System.Net.Security;
 
 namespace ICMPdfGenerator.Brokers.PdfBroker
 {
-    public partial class PdfBroker : IPdfBroker, IDisposable
+    public partial class Itext7PdfBroker : IItext7PdfBroker, IDisposable//iText7Broker change name
     {
-        private readonly IItext7Adapter adapter;
+        private readonly IItext7Mapper mapper;
         private ITemplateConfiguration TemplateConfiguration { get; set; }
 
         private PdfDocument PdfDocument { get; set; }
@@ -27,28 +27,37 @@ namespace ICMPdfGenerator.Brokers.PdfBroker
         private PageSize PageSize { get; set; } = PageSize.A4;
         private string PdfFilePath { get; set; }
         private string ModuleName { get; set; }
-        public PdfBroker(ITemplateConfiguration templateConfigurations, IItext7Adapter adapter)
+
+        public Itext7PdfBroker(ITemplateConfiguration templateConfigurations, IItext7Mapper mapper)
         {
             this.TemplateConfiguration = templateConfigurations;
-            this.adapter = adapter;
+            this.mapper = mapper;
             SetUpDocument();
 
+            Cell cell = new Cell();
+            cell.Add(new Paragraph(""));
+            cell.Add(new Table(4));
+            cell.AddStyle(new Style());
+            var style = new Style();
             
+            PdfFont pdfFont = iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.ZAPFDINGBATS);
+            
+                
         }
 
         private void SetUpDocument()
         {
-            this.PageSize = adapter.ConvertToPageSize(TemplateConfiguration.PageSize);
+            this.PageSize = mapper.MapToPageSize(TemplateConfiguration.PageSize);
             this.PdfFilePath = TemplateConfiguration.DocumentPath;
             this.ModuleName = TemplateConfiguration.ModuleName;
-            var margin = adapter.ConvertToMargin(TemplateConfiguration.DocumentMargin);
+            var margin = mapper.MapToMargin(TemplateConfiguration.DocumentMargin);
             this.PdfFileStream = new FileStream(PdfFilePath, FileMode.Create, FileAccess.Write);
             PdfWriter = new PdfWriter(PdfFileStream);
             PdfDocument = new PdfDocument(PdfWriter);
             Document = new Document(PdfDocument,this.PageSize);
             
             Document.SetMargins(margin.GetMarginTop(), margin.GetMarginRight(), margin.GetMarginBottom(), margin.GetMarginLeft());
-            Document.SetBackgroundColor(adapter.ConvertToColor(TemplateConfiguration.Color));
+            Document.SetBackgroundColor(mapper.MapToColor(TemplateConfiguration.Color));
     
         }
         public string GetDocument()

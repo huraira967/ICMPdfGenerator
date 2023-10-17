@@ -2,7 +2,7 @@
 
 namespace ICMPdfGenerator.Brokers.PdfBroker
 {
-    public partial class PdfBroker
+    public partial class Itext7PdfBroker
     {
         public void AddParagraph(Paragraph paragraph)
         {

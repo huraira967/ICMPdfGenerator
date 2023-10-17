@@ -25,6 +25,7 @@ namespace ICMPdfGenerator.PdfTemplates.PdfModuleTemplates.RAT.TemplateParts
         private Table BuildResidentBasicInformationTable(ResidentBasicInformation residentBasicInformation)
         {
             Table ResidentBasicnInfo = new Table(2);
+            
 
             ResidentBasicnInfo.Add(GetLabelCell("Name"));
             ResidentBasicnInfo.Add(GetValueCell(residentBasicInformation.Name));
@@ -47,3 +48,4 @@ namespace ICMPdfGenerator.PdfTemplates.PdfModuleTemplates.RAT.TemplateParts
         }
     }
 }
+
