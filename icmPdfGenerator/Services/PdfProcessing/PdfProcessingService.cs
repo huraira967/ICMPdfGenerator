@@ -1,4 +1,5 @@
 ﻿using ICMPdfGenerator.DTOs.DTOModels.RATDTOs;
+using ICMPdfGenerator.Models.Data;
 using ICMPdfGenerator.PdfTemplates.PdfModuleTemplates;
 using ICMPdfGenerator.PdfTemplates.PdfModuleTemplates.RAT;
 using ICMPdfGenerator.Services.PdfFoundationService;
@@ -21,18 +22,12 @@ namespace ICMPdfGenerator.Services.PdfProcessing
             var rat = (IRATModuleTemplate)pdfModulefTemplate;
             var table = rat.RATResidentBasicInformation.GetBasicResidentInformation(ratingDTO.ResidentBasicInformation);
             var p = rat.Heading.GetHeading();
-           
             pdfFoundationService.AddParagraph(p);
-            
 
+           
 
             pdfFoundationService.AddTable(table);
             
-            var t = new Models.Data.CellElements.Paragraph();
-            var seg = new Models.Data.CellElements.TextSegment("this is the document genereated by ICM.");
-            t.Add(seg);
-            t.SetTextAlignemnt(Configuration.Enums.TextAlignment.CENTER);
-            pdfFoundationService.AddParagraph(t);
             return pdfFoundationService.GetDocumentPath();
         }
     }

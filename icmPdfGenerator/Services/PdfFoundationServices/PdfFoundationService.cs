@@ -1,6 +1,7 @@
 ﻿using ICMPdfGenerator.Mapper;
 using ICMPdfGenerator.Brokers.PdfBroker;
-    
+using ICMPdfGenerator.Models.Data;
+
 namespace ICMPdfGenerator.Services.PdfFoundationService
 {
     public class PdfFoundationService : IPdfFoundationService
@@ -12,6 +13,12 @@ namespace ICMPdfGenerator.Services.PdfFoundationService
         {
             this.pdfBroker = pdfBroker;
             this.iTextMapper = pdfAdapeter;
+        }
+
+        public void AddCell(Cell cell)
+        {
+           var iText7Cell = iTextMapper.MapToCell(cell);
+            pdfBroker.AddCell(iText7Cell);
         }
 
         public void AddParagraph(ICMPdfGenerator.Models.Data.CellElements.Paragraph paragraph)

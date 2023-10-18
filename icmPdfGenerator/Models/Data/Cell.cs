@@ -1,9 +1,11 @@
 ﻿using ICMPdfGenerator.Models.Data.CellElements;
+using ICMPdfGenerator.Models.Layout.Styles;
 
 namespace ICMPdfGenerator.Models.Data
 {
     public class Cell : ICellElement
     {
+        public Style Styles { get; set; } = new();
         private List<ICellElement> CellElements { get; set; }
         public Cell()
         {

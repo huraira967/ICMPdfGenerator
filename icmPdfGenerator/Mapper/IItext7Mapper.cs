@@ -11,8 +11,6 @@ namespace ICMPdfGenerator.Mapper
         public PageSize MapToPageSize(ICMPdfGenerator.Configuration.Enums.PageSize PageSize);
         public iText.Layout.Borders.Border MapToBorder(ICMPdfGenerator.Models.Layout.Styles.Border Border);
         public Color MapToColor(ICMPdfGenerator.Configuration.Enums.Color Color);
-        public Margin MapToMargin(Margin margin);
-        public Padding MapToPadding(Padding padding);
         public iText.Layout.Element.Table MapToTable(ICMPdfGenerator.Models.Data.Table table);
         public iText.Layout.Element.Cell MapToCell(ICMPdfGenerator.Models.Data.Cell cell);
         public iText.Layout.Element.Paragraph MapToParagraph(ICMPdfGenerator.Models.Data.CellElements.Paragraph paragraph);

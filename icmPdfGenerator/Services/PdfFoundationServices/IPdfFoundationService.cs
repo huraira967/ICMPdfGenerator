@@ -8,6 +8,7 @@ namespace ICMPdfGenerator.Services.PdfFoundationService
     {
         void AddTable(Table table);
         void AddParagraph(Paragraph paragraph);
+        void AddCell(Cell cell);
         string GetDocumentPath();
     }
 }

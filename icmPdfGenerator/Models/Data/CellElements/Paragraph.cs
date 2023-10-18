@@ -1,4 +1,5 @@
 ﻿using ICMPdfGenerator.Configuration.Enums;
+using ICMPdfGenerator.Models.Layout.Styles;
 
 namespace ICMPdfGenerator.Models.Data.CellElements
 {
@@ -6,6 +7,7 @@ namespace ICMPdfGenerator.Models.Data.CellElements
     {
         private List<TextSegment> Text { get; set; }
         private TextAlignment TextAlignment { get; set; }
+        public Style Styles { get; set; } = new Style();
         public Paragraph()
         {
             Text = new List<TextSegment>();

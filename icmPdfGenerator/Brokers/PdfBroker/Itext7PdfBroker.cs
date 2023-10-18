@@ -50,7 +50,7 @@ namespace ICMPdfGenerator.Brokers.PdfBroker
             this.PageSize = mapper.MapToPageSize(TemplateConfiguration.PageSize);
             this.PdfFilePath = TemplateConfiguration.DocumentPath;
             this.ModuleName = TemplateConfiguration.ModuleName;
-            var margin = mapper.MapToMargin(TemplateConfiguration.DocumentMargin);
+            var margin = TemplateConfiguration.DocumentMargin;
             this.PdfFileStream = new FileStream(PdfFilePath, FileMode.Create, FileAccess.Write);
             PdfWriter = new PdfWriter(PdfFileStream);
             PdfDocument = new PdfDocument(PdfWriter);

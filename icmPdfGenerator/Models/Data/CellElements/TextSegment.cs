@@ -1,5 +1,6 @@
 ﻿using ICMPdfGenerator.Configuration.Constants;
 using ICMPdfGenerator.Configuration.Enums;
+using ICMPdfGenerator.Models.Layout.Styles;
 
 namespace ICMPdfGenerator.Models.Data.CellElements
 {
@@ -14,6 +15,8 @@ namespace ICMPdfGenerator.Models.Data.CellElements
         public int letterSpacing { get; set; }
         public VerticalAlignment VeritcalAlignment { get; set; } = VerticalAlignment.MIDDLE;
         public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.LEFT;
+        public Style Styles { get; set; } = new Style();
+
         public TextSegment(string value) {
         this.Value = value;
         }

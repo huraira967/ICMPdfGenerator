@@ -3,7 +3,8 @@ using ICMPdfGenerator.Configuration.Enums;
 using ICMPdfGenerator.Models.Data;
 using ICMPdfGenerator.Models.Data.CellElements;
 using ICMPdfGenerator.Models.Layout.Styles;
-//using iText.Layout.Element;
+//using iText.Layout.Properties;
+//using iText.Layout.Properties;
 
 namespace ICMPdfGenerator.Mapper
 {
@@ -15,9 +16,92 @@ namespace ICMPdfGenerator.Mapper
             if (LocalBorder == null)
                 throw new ArgumentNullException("Local Border must not null to Convert Local border to IText7 border");
 
-            return GetBorderByType(LocalBorder);
+            return GetBorder(LocalBorder);
         }
-        private static iText.Layout.Borders.Border GetBorderByType(Border LocalBorder)
+        public iText.Kernel.Colors.Color MapToColor(Color Color)
+        {
+            return GetColor(Color);
+        }
+        public iText.Kernel.Geom.PageSize MapToPageSize(PageSize PageSize)
+        {
+            return GetPageSize(PageSize);
+        }
+        public iText.Layout.Element.Paragraph MapToParagraph(Paragraph paragraph)
+        {
+            return ConvertToIText7Paragraph(paragraph);
+        }
+        public iText.Layout.Element.Table MapToTable(Table table)
+        {
+            iText.Layout.Element.Table iText7Table = new(table.GetColumns());
+            iText7Table.AddStyle(MapToStyle(table.Styles));
+
+            var cells = table.GetCells();
+
+            foreach (var cell in cells)
+            {
+                if (cell.GetType().Name.Equals(typeof(Cell).Name))
+                {
+                    iText7Table.AddCell(MapToCell((Cell)cell));
+                }
+            }
+            return iText7Table;
+        }
+
+        public iText.Layout.Element.Cell MapToCell(Cell cell)
+        {
+            iText.Layout.Element.Cell iText7Cell = new();
+            var cellStyles = MapToStyle(cell.Styles);
+            iText7Cell.AddStyle(cellStyles);
+            iText7Cell.SetBorderRadius(new iText.Layout.Properties.BorderRadius(100));
+            var cellContent = cell.GetCellContent();
+
+            foreach (var content in cellContent)
+            {
+                if (content.GetType().Name.Equals(typeof(Cell).Name))
+                {
+                    iText7Cell.Add(MapToCell((Cell)content));
+                }
+                else if (content.GetType().Name.Equals(typeof(Table).Name))
+                {
+                    iText7Cell.Add(MapToTable((Table)content));
+                }
+                else if (content.GetType().Name.Equals(typeof(Image).Name))
+                {
+                    object maptootable;
+                }
+                else if (content.GetType().Name.Equals(typeof(Paragraph).Name))
+                {
+                    iText7Cell.Add(ConvertToIText7Paragraph((Paragraph)content));
+                }
+            }
+            return iText7Cell;
+        }
+        private static iText.Layout.Properties.BorderRadius GetBorderRadius(Border LocalBorder)
+        {
+            iText.Layout.Properties.BorderRadius borderRadius = new iText.Layout.Properties.BorderRadius(MapToUnitValue(LocalBorder.GetBorderRadius()));
+            return borderRadius;
+        }
+        private static iText.Layout.Properties.BorderRadius GetBorderRadiusBottomLeft(Border LocalBorder)
+        {
+            iText.Layout.Properties.BorderRadius borderRadius = new iText.Layout.Properties.BorderRadius(MapToUnitValue(LocalBorder.GetBorderRadiusBottomLeft()));
+            return borderRadius;
+        }
+        private static iText.Layout.Properties.BorderRadius GetBorderRadiusBottomRight(Border LocalBorder)
+        {
+            iText.Layout.Properties.BorderRadius borderRadius = new iText.Layout.Properties.BorderRadius(MapToUnitValue(LocalBorder.GetBorderRadiusBottomRight()));
+            return borderRadius;
+        }
+        private static iText.Layout.Properties.BorderRadius GetBorderRadiusTopLeft(Border LocalBorder)
+        {
+            iText.Layout.Properties.BorderRadius borderRadius = new iText.Layout.Properties.BorderRadius(MapToUnitValue(LocalBorder.GetBorderRadiusTopLeft()));
+            return borderRadius;
+        }
+        private static iText.Layout.Properties.BorderRadius GetBorderRadiusTopRight(Border LocalBorder)
+        {
+            iText.Layout.Properties.BorderRadius borderRadius = new iText.Layout.Properties.BorderRadius(MapToUnitValue(LocalBorder.GetBorderRadiusTopRight()));
+            return borderRadius;
+        }
+        private static iText.Layout.Borders.Border GetBorder(Border LocalBorder)
         {
             return LocalBorder.GetBorderType() switch
             {
@@ -28,12 +112,50 @@ namespace ICMPdfGenerator.Mapper
                 _ => new iText.Layout.Borders.SolidBorder(GetColor(LocalBorder.GetBorderColor()), LocalBorder.GetBorderWidth(), LocalBorder.GetOpacity()),
             };
         }
-
-        public iText.Kernel.Colors.Color MapToColor(Color Color)
+        private static iText.Layout.Borders.Border GetBorderRight(Border LocalBorder)
         {
-            return GetColor(Color);
+            return LocalBorder.GetBorderTypeRight() switch
+            {
+                BorderType.None => iText.Layout.Borders.Border.NO_BORDER,
+                BorderType.Dashed => new iText.Layout.Borders.DashedBorder(GetColor(LocalBorder.GetBorderColorRight()), LocalBorder.GetBorderRight(), LocalBorder.GetBorderOpacityRight()),
+                BorderType.Solid => new iText.Layout.Borders.SolidBorder(GetColor(LocalBorder.GetBorderColorRight()), LocalBorder.GetBorderRight(), LocalBorder.GetBorderOpacityRight()),
+                BorderType.Dotted => new iText.Layout.Borders.DottedBorder(GetColor(LocalBorder.GetBorderColorRight()), LocalBorder.GetBorderRight(), LocalBorder.GetBorderOpacityRight()),
+                _ => new iText.Layout.Borders.SolidBorder(GetColor(LocalBorder.GetBorderColorRight()), LocalBorder.GetBorderRight(), LocalBorder.GetBorderOpacityRight()),
+            };
         }
-
+        private static iText.Layout.Borders.Border GetBorderLeft(Border LocalBorder)
+        {
+            return LocalBorder.GetBorderTypeLeft() switch
+            {
+                BorderType.None => iText.Layout.Borders.Border.NO_BORDER,
+                BorderType.Dashed => new iText.Layout.Borders.DashedBorder(GetColor(LocalBorder.GetBorderColorLeft()), LocalBorder.GetBorderLeft(), LocalBorder.GetBorderOpacityLeft()),
+                BorderType.Solid => new iText.Layout.Borders.SolidBorder(GetColor(LocalBorder.GetBorderColorLeft()), LocalBorder.GetBorderLeft(), LocalBorder.GetBorderOpacityLeft()),
+                BorderType.Dotted => new iText.Layout.Borders.DottedBorder(GetColor(LocalBorder.GetBorderColorLeft()), LocalBorder.GetBorderLeft(), LocalBorder.GetBorderOpacityLeft()),
+                _ => new iText.Layout.Borders.SolidBorder(GetColor(LocalBorder.GetBorderColorLeft()), LocalBorder.GetBorderLeft(), LocalBorder.GetBorderOpacityLeft()),
+            };
+        }
+        private static iText.Layout.Borders.Border GetBorderBottom(Border LocalBorder)
+        {
+            return LocalBorder.GetBorderTypeBottom() switch
+            {
+                BorderType.None => iText.Layout.Borders.Border.NO_BORDER,
+                BorderType.Dashed => new iText.Layout.Borders.DashedBorder(GetColor(LocalBorder.GetBorderColorBottom()), LocalBorder.GetBorderBottom(), LocalBorder.GetBorderOpacityBottom()),
+                BorderType.Solid => new iText.Layout.Borders.SolidBorder(GetColor(LocalBorder.GetBorderColorBottom()), LocalBorder.GetBorderBottom(), LocalBorder.GetBorderOpacityBottom()),
+                BorderType.Dotted => new iText.Layout.Borders.DottedBorder(GetColor(LocalBorder.GetBorderColorBottom()), LocalBorder.GetBorderBottom(), LocalBorder.GetBorderOpacityBottom()),
+                _ => new iText.Layout.Borders.SolidBorder(GetColor(LocalBorder.GetBorderColorBottom()), LocalBorder.GetBorderBottom(), LocalBorder.GetBorderOpacityBottom()),
+            };
+        }
+        private static iText.Layout.Borders.Border GetBorderTop(Border LocalBorder)
+        {
+            return LocalBorder.GetBorderTypeTop() switch
+            {
+                BorderType.None => iText.Layout.Borders.Border.NO_BORDER,
+                BorderType.Dashed => new iText.Layout.Borders.DashedBorder(GetColor(LocalBorder.GetBorderColorTop()), LocalBorder.GetBorderTop(), LocalBorder.GetBorderOpacityTop()),
+                BorderType.Solid => new iText.Layout.Borders.SolidBorder(GetColor(LocalBorder.GetBorderColorTop()), LocalBorder.GetBorderTop(), LocalBorder.GetBorderOpacityTop()),
+                BorderType.Dotted => new iText.Layout.Borders.DottedBorder(GetColor(LocalBorder.GetBorderColorTop()), LocalBorder.GetBorderTop(), LocalBorder.GetBorderOpacityTop()),
+                _ => new iText.Layout.Borders.SolidBorder(GetColor(LocalBorder.GetBorderColorTop()), LocalBorder.GetBorderTop(), LocalBorder.GetBorderOpacityTop()),
+            };
+        }
         private static iText.Kernel.Colors.Color GetColor(Color Color)
         {
 
@@ -51,10 +173,7 @@ namespace ICMPdfGenerator.Mapper
             };
         }
 
-        public iText.Kernel.Geom.PageSize MapToPageSize(PageSize PageSize)
-        {
-            return GetPageSize(PageSize);
-        }
+        
         private iText.Kernel.Geom.PageSize GetPageSize(PageSize PageSize)
         {
             return PageSize switch
@@ -66,56 +185,8 @@ namespace ICMPdfGenerator.Mapper
             };
         }
 
-        public Margin MapToMargin(Margin margin)
-        {
-            return margin;
-        }
-        public Padding MapToPadding(Padding padding)
-        {
-            return padding;
-        }
 
-        public iText.Layout.Element.Table MapToTable(Table table)
-        {
-            int columns = table.GetColumns();
-            var cells = table.GetCells();
-            iText.Layout.Element.Table iText7Table = new iText.Layout.Element.Table(columns);
-
-            foreach (var cell in cells)
-            {
-                iText7Table.AddCell(GetCell(cell));
-            }
-            return iText7Table;
-        }
-
-        private iText.Layout.Element.Cell GetCell(ICellElement cell)
-        {
-            iText.Layout.Element.Cell iText7Cell;
-            IList<ICellElement> cellContent = new List<ICellElement>();
-            if (cell.GetType().Name.Equals(typeof(Cell).Name))
-            {
-                iText7Cell = new iText.Layout.Element.Cell();
-                cellContent = ((Cell)cell).GetCellContent();
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(nameof(cell));
-            }
-
-            foreach (var content in cellContent)
-            {
-                if (content.GetType().Name.Equals(typeof(Image).Name))
-                {
-
-                }
-                else if (content.GetType().Name.Equals(typeof(Paragraph).Name))
-                {
-                    iText7Cell.Add(ConvertToIText7Paragraph((Paragraph)content));
-                }
-            }
-
-            return iText7Cell;
-        }
+        
         private iText.Layout.Element.Paragraph ConvertToIText7Paragraph(Paragraph paragraph)
         {
             iText.Layout.Element.Paragraph iText7Paragraph = new iText.Layout.Element.Paragraph();
@@ -125,33 +196,11 @@ namespace ICMPdfGenerator.Mapper
             foreach (var segment in paragraphSegments)
             {
                 var text = new iText.Layout.Element.Text(segment.Value);
-                text.SetFontSize((int)segment.FontSize);
-                ApplyFontStyle(ref text, segment.FontStyle);
-                text.SetFont(CreateFont(segment.FontFamily));
-                text.SetHorizontalAlignment(GetHorizontalAlignment(segment.HorizontalAlignment));
-                
+                text.AddStyle(MapToStyle(segment.Styles));
                 iText7Paragraph.Add(text);
             }
-            iText7Paragraph.SetTextAlignment(GetTextAlignment(paragraph.GetTextAlignment()));
-           
+            iText7Paragraph.AddStyle(MapToStyle(paragraph.Styles));
             return iText7Paragraph;
-        }
-        private static iText.Layout.Element.Text ApplyFontStyle(ref iText.Layout.Element.Text text, FontStyle fontStyle)
-        {
-            switch (fontStyle)
-            {
-                case FontStyle.Bold:
-                    text.SetBold();
-                    break;
-                case FontStyle.Italic:
-                    text.SetItalic();
-                    break;
-                case FontStyle.Nomral:
-                    break;
-                default:
-                    break;
-            }
-            return text;
         }
         private static iText.Layout.Properties.HorizontalAlignment GetHorizontalAlignment(HorizontalAlignment horizontalAlignment)
         {
@@ -161,6 +210,16 @@ namespace ICMPdfGenerator.Mapper
                 HorizontalAlignment.LEFT => iText.Layout.Properties.HorizontalAlignment.LEFT,
                 HorizontalAlignment.RIGHT => iText.Layout.Properties.HorizontalAlignment.RIGHT,
                 _ => iText.Layout.Properties.HorizontalAlignment.LEFT
+            };
+        }
+        private static iText.Layout.Properties.VerticalAlignment GetVerticalAlignment(VerticalAlignment verticalAlignment)
+        {
+            return verticalAlignment switch
+            {
+                VerticalAlignment.MIDDLE => iText.Layout.Properties.VerticalAlignment.MIDDLE,
+                VerticalAlignment.BOTTOM => iText.Layout.Properties.VerticalAlignment.BOTTOM,
+                VerticalAlignment.TOP => iText.Layout.Properties.VerticalAlignment.TOP,
+                _ => iText.Layout.Properties.VerticalAlignment.TOP
             };
         }
         private static iText.Layout.Properties.TextAlignment GetTextAlignment(TextAlignment textAlignment)
@@ -179,16 +238,7 @@ namespace ICMPdfGenerator.Mapper
             
         }
 
-        public iText.Layout.Element.Cell MapToCell(Cell cell)
-        {
-            throw new NotImplementedException();
-        }
-
-        public iText.Layout.Element.Paragraph MapToParagraph(Paragraph paragraph)
-        {
-            iText.Layout.Element.Paragraph iText7Paragraph = ConvertToIText7Paragraph(paragraph);
-            return iText7Paragraph;
-        }
+       
         private static iText.Kernel.Font.PdfFont CreateFont(string fontFamily)
         {
             iText.Kernel.Font.PdfFont pdfFont = fontFamily switch
@@ -227,10 +277,11 @@ namespace ICMPdfGenerator.Mapper
             //in itext7 1 is for
             //1 point
             //2  percent
-            int unitType = unitValue.IsPercentage ? 1 : unitValue.IsAbsolute ? 2 : 1;
+            //int unitType = unitValue.IsPercentage ? 1 : (unitValue.IsAbsolute ? 2 : 1);
 
-            iText.Layout.Properties.UnitValue iText7UnitValue = new(unitType, unitValue.Value);
-            return iText7UnitValue;
+           return unitValue.IsPercentage ? iText.Layout.Properties.UnitValue.CreatePercentValue(unitValue.Value)
+                                        : iText.Layout.Properties.UnitValue.CreatePointValue(unitValue.Value);
+
         }
         private static iText.Layout.Hyphenation.HyphenationConfig GetHyphenation(HyphenationConfiguration hyphenationConfiguration)
         {
@@ -238,6 +289,9 @@ namespace ICMPdfGenerator.Mapper
         }
         private static iText.Layout.Style MapToStyle(Style style)
         {
+            if (style == null)
+                throw new ArgumentNullException(nameof(style));
+
             iText.Layout.Style iText7Style = new();
 
             switch (style.FontStyle)
@@ -256,52 +310,118 @@ namespace ICMPdfGenerator.Mapper
             iText7Style.SetBackgroundColor(GetColor(style.BackgroundColor));
 
             iText7Style.SetBaseDirection(GetBaseDirection(style.BaseDirection));
-            iText7Style.SetBorder(GetBorderByType(style.Border));
-            iText7Style.SetCharacterSpacing(style.CharacterSpacing);
-            iText7Style.SetFixedPosition(style.FixedPosition.Left,style.FixedPosition.Bottom, MapToUnitValue(style.FixedPosition.Width));
+
             iText7Style.SetFont(CreateFont(style.FontFamily));
+
             iText7Style.SetFontColor(GetColor(style.FontColor));
             iText7Style.SetFontSize((int)style.FontSize);
-            iText7Style.SetHeight(MapToUnitValue(style.Height));
             iText7Style.SetHorizontalAlignment(GetHorizontalAlignment(style.HorizontalAlignment));
-            iText7Style.SetHyphenation(GetHyphenation(style.Hyphenation));
-            iText7Style.SetKeepTogether(style.KeepTogather);
+            iText7Style.SetVerticalAlignment(GetVerticalAlignment(style.VerticalAlignment));
+
+            iText7Style.SetTextAlignment(GetTextAlignment(style.TextAlignment));
+
+            if (style.Border != null)
+            {
+
+
+                iText7Style.SetBorderRadius(GetBorderRadius(style.Border));
+                iText7Style.SetBorderTopRightRadius(GetBorderRadiusTopRight(style.Border));
+                iText7Style.SetBorderTopLeftRadius(GetBorderRadiusTopLeft(style.Border));
+                iText7Style.SetBorderBottomRightRadius(GetBorderRadiusBottomRight(style.Border));
+                iText7Style.SetBorderBottomLeftRadius(GetBorderRadiusBottomLeft(style.Border));
+
+                iText7Style.SetBorder(GetBorder(style.Border));
+                iText7Style.SetBorderTop(GetBorderTop(style.Border));
+                iText7Style.SetBorderRight(GetBorderRight(style.Border));
+                iText7Style.SetBorderLeft(GetBorderLeft(style.Border));
+                iText7Style.SetBorderBottom(GetBorderBottom(style.Border));
+
+
+
+               
+
+
+            }
+            if(style.CharacterSpacing > -1)
+            {
+                iText7Style.SetCharacterSpacing(style.CharacterSpacing);
+            }
+            if(style.FixedPosition != null)
+            {
+                iText7Style.SetFixedPosition(style.FixedPosition.Left, style.FixedPosition.Bottom, MapToUnitValue(style.FixedPosition.Width));
+            }
+            if(style.Height != null)
+            {
+                iText7Style.SetHeight(MapToUnitValue(style.Height));
+            }
+            if(style.Hyphenation != null)
+            {
+                iText7Style.SetHyphenation(GetHyphenation(style.Hyphenation));
+            }
+            if (style.KeepTogather)
+            {
+                iText7Style.SetKeepTogether(style.KeepTogather);
+            }
+            if(style.Margin != null)
+            {
+                iText7Style.SetMarginBottom(style.Margin.MarginBottom);
+                iText7Style.SetMarginTop(style.Margin.MarginTop);
+                iText7Style.SetMarginLeft(style.Margin.MarginLeft);
+                iText7Style.SetMarginRight(style.Margin.MarginRight);
+            }
+            if(style.MaxHeight != null)
+            {
+                iText7Style.SetMaxHeight(MapToUnitValue(style.MaxHeight));
+            }
+            if(style.MinHeight != null)
+            {
+                iText7Style.SetMinHeight(MapToUnitValue(style.MinHeight));
+            }
+            if(style.MaxWidth != null)
+            {
+                iText7Style.SetMaxWidth(MapToUnitValue(style.MaxWidth));
+            }
+            if(style.MinWidth != null)
+            {
+                iText7Style.SetMinWidth(MapToUnitValue(style.MinWidth));
+            }
+            if(style.Opacity > -1)
+            {
+                iText7Style.SetOpacity(style.Opacity);
+            }
+            if(style.Padding != null)
+            {
+                iText7Style.SetPaddingBottom(style.Padding.PaddingBottom);
+                iText7Style.SetPaddingLeft(style.Padding.PaddingLeft);
+                iText7Style.SetPaddingRight(style.Padding.PaddingRight);
+                iText7Style.SetPaddingTop(style.Padding.PaddingTop);
+            }
+            if(style.Rotation != -1) 
+            {
+                iText7Style.SetRotationAngle(style.Rotation);
+            }
+            if(style.SpacingRatio != -1)
+            {
+                iText7Style.SetSpacingRatio(style.SpacingRatio);
+            }
+
+            if (style.Underline)
+            {
+                iText7Style.SetUnderline();
+            }
+
+            if(style.Width != null)
+            {
+                iText7Style.SetWidth(MapToUnitValue(style.Width));
+            }
+            if(style.WordSpacing != -1)
+            {
+                iText7Style.SetWordSpacing(style.WordSpacing);
+            }
+
 
             return iText7Style;
         }
 
-       
-
-    }
-    public class temp
-    {
-        public FontStyle FontStyle { get; set; } //done
-        public Color BackgroundColor { get; set; } //done
-        public BaseDirection BaseDirection { get; set; } //done
-
-        public Border Border { get; set; } //done
-        public float CharacterSpacing { get; set; } //done
-        public FixefPosition FixedPosition { get; set; } //done
-        public string FontFamily { get; set; } //we will use pre-built font which //done
-        public Color FontColor { get; set; } //done
-        public FontSize FontSize { get; set; } // done
-        public UnitValue Height { get; set; } //done
-        public HorizontalAlignment HorizontalAlignment { get; set; } //done
-        public HyphenationConfiguration Hyphenation { get; set; } //done
-        public bool KeepTogather { get; set; } //done
-        public Margin Margin { get; set; }
-        public UnitValue MaxHeight { get; set; }
-        public UnitValue MinHeight { get; set; }
-        public UnitValue MaxWidth { get; set; }
-        public UnitValue MinWidth { get; set; }
-        public float Opacity { get; set; }
-        public Padding Padding { get; set; }
-        public float Rotation { get; set; }
-        public float SpacingRatio { get; set; }
-        public TextAlignment TextAlignment { get; set; }
-        public bool Underline { get; set; }
-        public VerticalAlignment VerticalAlignment { get; set; }
-        public UnitValue Width { get; set; }
-        public float WordSpacing { get; set; }
     }
 }
