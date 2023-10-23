@@ -5,6 +5,7 @@ using ICMPdfGenerator.Mapper;
 using ICMPdfGenerator.PdfTemplates.PdfTemplateFactory;
 using ICMPdfGenerator.Services.PdfFoundationService;
 using ICMPdfGenerator.Services.PdfProcessing;
+using ICMPdfGenerator.TemplateConfigurations.PdfTemplateConfigurationsFactory;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace icmPdfGenerator

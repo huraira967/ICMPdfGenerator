@@ -1,4 +1,6 @@
-﻿namespace ICMPdfGenerator.TemplateConfigurations.PdfTemplateConfigurationsFactory
+﻿using ICMPdfGenerator.PdfTemplateConfigurations;
+
+namespace ICMPdfGenerator.TemplateConfigurations.PdfTemplateConfigurationsFactory
 {
     public interface IPdfTemplateConfigurationsFactory
     {

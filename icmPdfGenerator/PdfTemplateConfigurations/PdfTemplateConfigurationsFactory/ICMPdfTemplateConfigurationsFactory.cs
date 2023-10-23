@@ -1,10 +1,9 @@
-﻿namespace ICMPdfGenerator.TemplateConfigurations.PdfTemplateConfigurationsFactory
+﻿using ICMPdfGenerator.PdfTemplateConfigurations;
+
+namespace ICMPdfGenerator.TemplateConfigurations.PdfTemplateConfigurationsFactory
 {
     public class ICMPdfTemplateConfigurationsFactory : IPdfTemplateConfigurationsFactory
     {
-        public T GetConfiguration<T>() where T : IPdfTemplateConfiguration, new()
-        {
-            return new T();
-        }
+        public T GetConfiguration<T>() where T : IPdfTemplateConfiguration, new() => new T();
     }
 }

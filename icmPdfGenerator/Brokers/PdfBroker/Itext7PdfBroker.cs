@@ -1,4 +1,5 @@
 ﻿using ICMPdfGenerator.Mapper;
+using ICMPdfGenerator.PdfTemplateConfigurations;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Layout;
@@ -21,7 +22,8 @@ namespace ICMPdfGenerator.Brokers.PdfBroker
         private string PdfFilePath { get; set; }
         private string ModuleName { get; set; }
 
-        public IText7PdfBroker(IPdfTemplateConfiguration templateConfigurations, IPdfMapper mapper)
+        public IText7PdfBroker(IPdfTemplateConfiguration templateConfigurations,
+                               IPdfMapper mapper)
         {
             this.TemplateConfiguration = templateConfigurations;
             this.mapper = mapper;
