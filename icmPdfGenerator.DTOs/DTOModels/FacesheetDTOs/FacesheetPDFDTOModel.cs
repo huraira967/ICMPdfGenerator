@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ICMPdfGenerator.DTOs.DTOModels.FacesheetDTOs
+﻿namespace ICMPdfGenerator.DTOs.DTOModels.FacesheetDTOs
 {
     public class FacesheetPDFDTOModel
     {
@@ -17,7 +11,7 @@ namespace ICMPdfGenerator.DTOs.DTOModels.FacesheetDTOs
         public string LogoImage { get; set; }
         public string ResidentImage { get; set; }
         public string DocumentTitle { get; set; }
-      
+
         public int UserId { get; set; }
         public int FacilityId { get; set; }
         public string Name { get; set; }

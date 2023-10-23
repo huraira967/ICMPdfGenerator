@@ -1,5 +1,4 @@
-﻿using ICMPdfGenerator.Controllers;
-using ICMPdfGenerator.DTOs.DTOModels.RATDTOs;
+﻿using ICMPdfGenerator.DTOs.DTOModels.RATDTOs;
 
 namespace ICMPdfGenerator.Services.PdfProcessing
 {

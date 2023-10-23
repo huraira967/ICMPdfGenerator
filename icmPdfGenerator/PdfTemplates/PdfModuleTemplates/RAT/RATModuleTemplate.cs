@@ -2,15 +2,15 @@
 
 namespace ICMPdfGenerator.PdfTemplates.PdfModuleTemplates.RAT
 {
-    public class RATModuleTemplate : IPdfModulefTemplate, IRATModuleTemplate
+    public class RATModuleTemplate : IiCMPdfModulefTemplate, IRATModuleTemplate
     {
         public RATHeading Heading { get => (RATHeading)GetRATHeading(); }
-        public RATResidentBasicInformation RATResidentBasicInformation { get => (RATResidentBasicInformation)GetBasicInformationPart(); } 
-        
+        public RATResidentBasicInformation RATResidentBasicInformation { get => (RATResidentBasicInformation)GetBasicInformationPart(); }
+
         private IRATTemplatePart GetBasicInformationPart()
         {
-           return new RATResidentBasicInformation();
-           
+            return new RATResidentBasicInformation();
+
         }
         private IRATTemplatePart GetRATHeading()
         {

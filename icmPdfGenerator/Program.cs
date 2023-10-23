@@ -1,11 +1,10 @@
-using ICMPdfGenerator.Mapper;
 using ICMPdfGenerator.Brokers.PdfBroker;
 using ICMPdfGenerator.Builder.documentPathBuilder;
 using ICMPdfGenerator.Extensions.ServiceCollectionExtensions;
+using ICMPdfGenerator.Mapper;
 using ICMPdfGenerator.PdfTemplates.PdfTemplateFactory;
 using ICMPdfGenerator.Services.PdfFoundationService;
 using ICMPdfGenerator.Services.PdfProcessing;
-using ICMPdfGenerator.TemplateConfigurations.TemplateConfigurationsFactory;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace icmPdfGenerator
@@ -28,12 +27,12 @@ namespace icmPdfGenerator
                 options.AllowSynchronousIO = true;
             });
 
-            builder.Services.AddScoped<IItext7PdfBroker, Itext7PdfBroker>();            
-            builder.Services.AddSingleton<ITemplateConfigurationsFactory, TemplateConfigurationsFactory>();
-            builder.Services.AddTransient<IPdfDocumentPathBuilder, PdfDocumentPathBuilder>();
-            builder.Services.AddSingleton<IItext7Mapper, Itext7Mapper>();
-            builder.Services.AddScoped<IPdfFoundationService, PdfFoundationService>();
-            builder.Services.AddSingleton<IPdfTemplateFactory,  PdfTemplateFactory>();
+            builder.Services.AddScoped<IPdfBroker, IText7PdfBroker>();
+            builder.Services.AddSingleton<IPdfTemplateConfigurationsFactory, ICMPdfTemplateConfigurationsFactory>();
+            builder.Services.AddTransient<IPathBuilder, PdfDocumentPathBuilder>();
+            builder.Services.AddSingleton<IPdfMapper, iText7Mapper>();
+            builder.Services.AddScoped<IIText7PdfFoundationService, IText7PdfFoundationService>();
+            builder.Services.AddSingleton<IPdfTemplateFactory, ICMPdfTemplateFactory>();
             builder.Services.AddScoped<IPdfProcessingService, PdfProcessingService>();
             builder.Services.AddResolveTemplateConfiguration();
             builder.Services.AddResolvePdfTemplate();
@@ -50,7 +49,7 @@ namespace icmPdfGenerator
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            
+
 
             app.UseHttpsRedirection();
 

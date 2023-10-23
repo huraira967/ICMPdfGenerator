@@ -15,7 +15,7 @@ namespace ICMPdfGenerator.Controllers
         {
             PdfProcessingService = pdfProcessingService;
         }
-       
+
         [Route("rat")]
         [HttpPost]
         public IActionResult ResidentAssessmentPDF(RATPDFDTOModel abc)

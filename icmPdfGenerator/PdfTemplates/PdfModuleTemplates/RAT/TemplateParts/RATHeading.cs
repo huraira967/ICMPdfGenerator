@@ -1,5 +1,6 @@
-﻿using ICMPdfGenerator.Configuration.Enums;
-using ICMPdfGenerator.Models.Data.CellElements;
+﻿using ICMPdfGenerator.ICMProperties.Enums;
+using ICMPdfGenerator.Models.ICMPdfElements;
+using ICMPdfGenerator.Models.ICMPdfElements.CellElements;
 
 namespace ICMPdfGenerator.PdfTemplates.PdfModuleTemplates.RAT.TemplateParts
 {
@@ -13,12 +14,12 @@ namespace ICMPdfGenerator.PdfTemplates.PdfModuleTemplates.RAT.TemplateParts
             this.DocumentTitle = heading;
 
             var text = new TextSegment(DocumentTitle);
-           // text.FontSize = Configuration.Enums.FontSize.Px14;
-           // text.FontStyle = Configuration.Enums.FontStyle.Bold;
-            text.FontWeight = Configuration.Enums.FontWeight.MEDIUM;
-            //text.HorizontalAlignment = Configuration.Enums.HorizontalAlignment.CENTER;
+            // text.FontSize = ICMProperties.Enums.FontSize.Px14;
+            // text.FontStyle = ICMProperties.Enums.FontStyle.Bold;
+            text.FontWeight = ICMProperties.Enums.FontWeight.MEDIUM;
+            //text.HorizontalAlignment = ICMProperties.Enums.HorizontalAlignment.CENTER;
             Heading = new Paragraph().Add(text);
-            //Heading.SetTextAlignemnt(Configuration.Enums.TextAlignment.CENTER);
+            //Heading.SetTextAlignemnt(ICMProperties.Enums.TextAlignment.CENTER);
 
             text.Styles.FontSize = FontSize.Px14;
             text.Styles.FontStyle = FontStyle.Bold;

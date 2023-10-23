@@ -15,6 +15,6 @@ namespace ICMPdfGenerator.Controllers
             DateOnly a = (DateOnly)converter.ConvertFrom(DateTime.Now.Date);
             return Ok(a);
         }
-        
+
     }
 }

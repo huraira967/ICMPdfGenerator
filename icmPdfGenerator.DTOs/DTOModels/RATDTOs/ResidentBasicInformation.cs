@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ICMPdfGenerator.DTOs.DTOModels.RATDTOs
+﻿namespace ICMPdfGenerator.DTOs.DTOModels.RATDTOs
 {
     public class ResidentBasicInformation
     {
@@ -14,6 +8,6 @@ namespace ICMPdfGenerator.DTOs.DTOModels.RATDTOs
         public string Gender { get; set; } = "Male";
         public DateTime DateOfBirth { get; set; } = DateTime.Now;
         public string Nationality { get; set; } = "Pakistani";
-        
+
     }
 }
