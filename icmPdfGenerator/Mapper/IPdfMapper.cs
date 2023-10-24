@@ -9,15 +9,15 @@ namespace ICMPdfGenerator.Mapper
 {
     public interface IPdfMapper //change name PdfAdapter
     {
-        public PageSize MapToPageSize(ICMPdfGenerator.ICMProperties.Enums.PageSize PageSize);
-        public iText.Layout.Borders.Border MapToBorder(ICMPdfGenerator.Models.ICMPdfLayout.Elements.Border Border);
-        public Color MapToColor(ICMPdfGenerator.ICMProperties.Enums.Color Color);
-        public iText.Layout.Element.Table MapToTable(ICMPdfGenerator.Models.ICMPdfElements.Table table);
-        public iText.Layout.Element.Cell MapToCell(ICMPdfGenerator.Models.ICMPdfElements.Cell cell);
-        public iText.Layout.Element.Paragraph MapToParagraph(Paragraph paragraph);
-        public iText.Layout.Element.LineSeparator MapToLineSeparator(LineSeparator lineSeparator);
-        public iText.Layout.Element.Image MapToImage(Image image);
-        public iText.Layout.Element.IBlockElement MapToBlockElement(ICellElement cellElement);
-        public iText.Layout.Element.Table MapToVerticalSpace(float points);
+        public object MapToPageSize<TResult>(ICMPdfGenerator.ICMProperties.Enums.PageSize PageSize);
+        public object MapToBorder<TResult>(ICMPdfGenerator.Models.ICMPdfLayout.Elements.Border Border);
+        public object MapToColor<TResult>(ICMPdfGenerator.ICMProperties.Enums.Color Color);
+        public object MapToTable<TResult>(ICMPdfGenerator.Models.ICMPdfElements.Table table);
+        public object MapToCell<TResult>(ICMPdfGenerator.Models.ICMPdfElements.Cell cell);
+        public object MapToParagraph<TResult>(Paragraph paragraph);
+        public object MapToLineSeparator<TResult>(LineSeparator lineSeparator);
+        public object MapToImage<TResult>(Image image);
+        public object MapToBlockElement<TResult>(ICellElement cellElement);
+        public object MapToVerticalSpace<TResult>(float points);
     }
 }

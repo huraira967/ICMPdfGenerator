@@ -35,7 +35,7 @@ namespace ICMPdfGenerator.Brokers.PdfBroker
 
         private void SetUpDocument()
         {
-            this.PageSize = mapper.MapToPageSize(TemplateConfiguration.PageSize);
+            this.PageSize = (iText.Kernel.Geom.PageSize)mapper.MapToPageSize<iText.Kernel.Geom.PageSize>(TemplateConfiguration.PageSize);
             this.PdfFilePath = TemplateConfiguration.DocumentPath;
             this.ModuleName = TemplateConfiguration.ModuleName;
             var margin = TemplateConfiguration.DocumentMargin;
@@ -45,10 +45,10 @@ namespace ICMPdfGenerator.Brokers.PdfBroker
             Document = new Document(PdfDocument, this.PageSize);
 
             Document.SetMargins(margin.GetMarginTop(), margin.GetMarginRight(), margin.GetMarginBottom(), margin.GetMarginLeft());
-            Document.SetBackgroundColor(mapper.MapToColor(TemplateConfiguration.Color));
+            Document.SetBackgroundColor((iText.Kernel.Colors.Color)mapper.MapToColor<iText.Kernel.Colors.Color>(TemplateConfiguration.Color));
             if (TemplateConfiguration.Footer != null)
             {
-                var footer = mapper.MapToBlockElement(TemplateConfiguration.Footer);
+                var footer = (iText.Layout.Element.IBlockElement)mapper.MapToBlockElement<iText.Layout.Element.IBlockElement>(TemplateConfiguration.Footer);
                 AddFooter(footer);
             }
         }

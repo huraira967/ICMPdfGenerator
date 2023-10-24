@@ -11,38 +11,58 @@ namespace ICMPdfGenerator.Mapper
     public class iText7Mapper : IPdfMapper
 #pragma warning restore IDE1006 // Naming Elements
     {
-        public iText.Layout.Borders.Border MapToBorder(Border LocalBorder)
+        public object MapToBorder<TResult>(Border LocalBorder)
         {
+            if (!typeof(TResult).Equals(typeof(iText.Layout.Borders.Border)))
+                throw new NotSupportedException($"{typeof(TResult)} is not Supported. TResult must be of type {typeof(iText.Layout.Borders.Border)}.");
 
             if (LocalBorder == null)
                 throw new ArgumentNullException("Local Border must not null to Convert Local border to IText7 border");
 
             return GetBorder(LocalBorder);
         }
-        public iText.Layout.Element.Image MapToImage(Image image)
+        public object MapToImage<TResult>(Image image)
         {
+            if (!typeof(TResult).Equals(typeof(iText.Layout.Element.Image)))
+                throw new NotSupportedException($"{typeof(TResult)} is not Supported. TResult must be of type {typeof(iText.Layout.Element.Image)}.");
             return GetImage(image);
         }
-        public iText.Layout.Element.LineSeparator MapToLineSeparator(LineSeparator lineSeparator)
+        public object MapToLineSeparator<TResult>(LineSeparator lineSeparator)
         {
+            if (!typeof(TResult).Equals(typeof(iText.Layout.Element.LineSeparator)))
+                throw new NotSupportedException($"{typeof(TResult)} is not Supported. TResult must be of type {typeof(iText.Layout.Element.LineSeparator)}.");
+
             iText.Layout.Element.LineSeparator itext7SineSeparator = new iText.Layout.Element.LineSeparator(GetLine(lineSeparator.Line));
             itext7SineSeparator.AddStyle(MapToStyle(lineSeparator.Styles));
             return itext7SineSeparator;
         }
-        public iText.Kernel.Colors.Color MapToColor(Color Color)
+        public object MapToColor<TResult>(Color Color)
         {
+            if (!typeof(TResult).Equals(typeof(iText.Kernel.Colors.Color)))
+                throw new NotSupportedException($"{typeof(TResult)} is not Supported. TResult must be of type {typeof(iText.Kernel.Colors.Color)}.");
+
             return GetColor(Color);
         }
-        public iText.Kernel.Geom.PageSize MapToPageSize(PageSize PageSize)
+        public object MapToPageSize<TResult>(PageSize PageSize)
         {
+            if(!typeof(TResult).Equals(typeof(iText.Kernel.Geom.PageSize)))
+                throw new NotSupportedException($"{typeof(TResult)} is not Supported. TResult must be of type {typeof(iText.Kernel.Geom.PageSize)}.");
+            
+
             return GetPageSize(PageSize);
         }
-        public iText.Layout.Element.Paragraph MapToParagraph(Paragraph paragraph)
+        public object MapToParagraph<TResult>(Paragraph paragraph)
         {
+            if (!typeof(TResult).Equals(typeof(iText.Layout.Element.Paragraph)))
+                throw new NotSupportedException($"{typeof(TResult)} is not Supported. TResult must be of type {typeof(iText.Layout.Element.Paragraph)}.");
+
             return ConvertToIText7Paragraph(paragraph);
         }
-        public iText.Layout.Element.Table MapToTable(Table table)
+        public object MapToTable<TResult>(Table table)
         {
+            if (!typeof(TResult).Equals(typeof(iText.Layout.Element.Table)))
+                throw new NotSupportedException($"{typeof(TResult)} is not Supported. TResult must be of type {typeof(iText.Layout.Element.Table)}.");
+
             iText.Layout.Element.Table iText7Table = new(table.GetColumns());
             iText7Table.AddStyle(MapToStyle(table.Styles));
 
@@ -52,14 +72,17 @@ namespace ICMPdfGenerator.Mapper
             {
                 if (cell.GetType().Name.Equals(typeof(Cell).Name))
                 {
-                    iText7Table.AddCell(MapToCell((Cell)cell));
+                    iText7Table.AddCell((iText.Layout.Element.Cell)MapToCell<iText.Layout.Element.Cell>((Cell)cell));
                 }
             }
             return iText7Table;
         }
 
-        public iText.Layout.Element.Cell MapToCell(Cell cell)
+        public object MapToCell<TResult>(Cell cell)
         {
+            if (!typeof(TResult).Equals(typeof(iText.Layout.Element.Cell)))
+                throw new NotSupportedException($"{typeof(TResult)} is not Supported. TResult must be of type {typeof(iText.Layout.Element.Cell)}.");
+
             iText.Layout.Element.Cell iText7Cell = new(cell.RowSpan, cell.ColSpan);
             var cellStyles = MapToStyle(cell.Styles);
             iText7Cell.AddStyle(cellStyles);
@@ -70,11 +93,11 @@ namespace ICMPdfGenerator.Mapper
             {
                 if (content.GetType().Name.Equals(typeof(Cell).Name))
                 {
-                    iText7Cell.Add(MapToCell((Cell)content));
+                    iText7Cell.Add((iText.Layout.Element.Cell)MapToCell<iText.Layout.Element.Cell>((Cell)content));
                 }
                 else if (content.GetType().Name.Equals(typeof(Table).Name))
                 {
-                    iText7Cell.Add(MapToTable((Table)content));
+                    iText7Cell.Add((iText.Layout.Element.Table)MapToTable<iText.Layout.Element.Table>((Table)content));
                 }
                 else if (content.GetType().Name.Equals(typeof(Image).Name))
                 {
@@ -87,15 +110,18 @@ namespace ICMPdfGenerator.Mapper
             }
             return iText7Cell;
         }
-        public iText.Layout.Element.IBlockElement MapToBlockElement(ICellElement cellElement)
+        public object MapToBlockElement<TResult>(ICellElement cellElement)
         {
+            if (!typeof(TResult).Equals(typeof(iText.Layout.Element.IBlockElement)))
+                throw new NotSupportedException($"{typeof(TResult)} is not Supported. TResult must be of type {typeof(iText.Layout.Element.IBlockElement)}.");
+
             if (cellElement.GetType().Name.Equals(typeof(Cell).Name))
             {
-                return MapToCell((Cell)cellElement);
+                return (iText.Layout.Element.Cell)MapToCell<iText.Layout.Element.Cell>((Cell)cellElement);
             }
             else if (cellElement.GetType().Name.Equals(typeof(Table).Name))
             {
-                return MapToTable((Table)cellElement);
+                return (iText.Layout.Element.Table)MapToTable<iText.Layout.Element.Table>((Table)cellElement);
             }
             else if (cellElement.GetType().Name.Equals(typeof(Paragraph).Name))
             {
@@ -103,8 +129,11 @@ namespace ICMPdfGenerator.Mapper
             }
             throw new NotImplementedException($"only {nameof(Cell)}, {nameof(Table)}, {nameof(Paragraph)} are allowed to add in footer");
         }
-        public iText.Layout.Element.Table MapToVerticalSpace(float points)
+        public object MapToVerticalSpace<TResult>(float points)
         {
+            if (!typeof(TResult).Equals(typeof(iText.Layout.Element.Table)))
+                throw new NotSupportedException($"{typeof(TResult)} is not Supported. TResult must be of type {typeof(iText.Layout.Element.Table)}.");
+
             iText.Layout.Element.Table table = new(1);
             table.SetMarginTop(points);
             return table;
